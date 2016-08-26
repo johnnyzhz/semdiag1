@@ -1,0 +1,117 @@
+﻿<!-- ***************************************************-->
+<!-- * semdiag: draw SEM path diagram interactively    *-->
+<!-- * Authors: Yujiao Mai, Zhiyong Zhang, Ke-Hai Yuan *-->
+<!-- * Copyright 2015-2015, psychstat.org              *-->
+<!-- * Licensed under the MIT License (MIT)            *-->
+<!-- * Current software version 1.0                    *-->
+<!-- * Support email for questions zzhang4@nd.edu      *-->
+<!-- *                             ymai@nd.edu         *-->
+<!-- ***************************************************-->
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>SEM diagram</title>
+	<link rel="stylesheet" type="text/css" href="./css/page-diagram.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/jquery-ui-1.8.20.custom.css"/>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-json/2.4.0/jquery.json.min.js"> </script>
+	<script src="./js/globalvars.js" charset="utf-8"></script>	
+	<script src="./js/geometryfs.js" charset="utf-8"></script>	
+	<script src="./js/edge&nodeMethods_l1.js" charset="utf-8"></script>
+	<script src="./js/edge&nodeMethods_l2.js" charset="utf-8"></script>
+	<script src="./js/svgeventfs.js" charset="utf-8"></script>
+	<script src="./js/recodefs.js" charset="utf-8"></script>
+</head>
+<body>
+<div class ="semdiag">
+	<div id="header">
+	   <div  class="bar">
+			 <a href="/" >semdiag: Draw SEM Diagrams</a> </br></br>		
+	  </div>
+	</div>
+	<div id="pdsvgpage" >
+		<div id="pdsvgmenus">
+			<div id="pdsvgfilemenu">
+				<div id="subfilemenu">
+				<button id="BTNload" class="image" ><img class=icon src="./img/open.png" width="36" height="36" name="Load from file"/></button>
+				<button id="BTNnew" class="image" ><img class=icon src="./img/new.png" width="36" height="36" name="New file"/></button>
+				<button id="BTNsave" class="image" ><img class=icon src="./img/save.png" width="36" height="36" name="Save to file"/></button>
+				<button id="BTNtoSVG" class="image" ><img class=icon src="./img/toSVG.png" width="36" height="36" name="Save to SVG"/></button>
+				</div>
+			</div>
+			<hr>
+			<div id="pdsvgdiagrammenus">
+				<div id="subdiagrammenu">
+					<div id="basicdiagram">
+						<button  id="BTNrect" class="image"  ><img class=icon src="./img/RECT.png" width="36" height="36" name="rect"></button>
+						<button  id="BTNellipse" class="image" ><img class=icon src="./img/ELLIPSE.png" width="36" height="36" name="circle"></button>				
+						<button  id="BTNtriangle" class="image" ><img class=icon src="./img/TRIANGLE.png" width="36" height="36" name="TRIANGLE"></button>									
+						<button  id="BTNlinkto" class="image" ><img class=icon src="./img/arrow.png" width="36" height="36" name="paths"></button>
+						<button  id="BTNlinktobi" class="image" ><img class=icon src="./img/arrowbi.png" width="36" height="36" name="pathsbi"></button>
+						<button  id="BTNtexting" class="image" ><img class=icon src="./img/TXT.png" width="36" height="36" name="txtedit"></button>			
+						<button  id="BTNDEL" class="image" ><img class=icon src="./img/DEL.png" width="36" height="36" name="delete"></button>
+						<button	 id="BTNclone" class="image" ><img class=icon src="./img/CLONE.png" width="36" height="36" name="clone" ></button>						
+						</br>
+						<button  id="BTNBLACK" class="image" ><img class=icon src="./img/BLACK.png" width="36" height="36" name="black" ></button>	
+						<button id="BTNRED" class="image"  ><img class=icon src="./img/RED.png" width="36" height="36" name="red" ></button>		
+						<button id="BTNBLUE" class="image" ><img class=icon src="./img/BLUE.png" width="36" height="36" name="blue" ></button>	
+						<button id="BTNGREEN" class="image" ><img class=icon src="./img/GREEN.png" width="36" height="36" name="green" ></button>
+						<button id="BTNDOTTED"  class="image" ><img class=icon src="./img/dotted.png" width="36" height="36" name="dotted" ></button>
+						<button id="BTNSOLID" class="image"  ><img class=icon src="./img/solid.png" width="36" height="36" name="solid" ></button>		
+						<button id="BTNLa" class="image" ><img class=icon src="./img/La.png" width="36" height="36" name="la" ></button>	
+						<button id="BTNGrid" class="image" ><img class=icon src="./img/Grid.png" width="36" height="36" name="grid" ></button>						
+					</div>
+					<div id="diagramoptions">
+						<form action="" method="post" name="form001" class='diagram'>
+							<p class='diagrammenu-linetitle'>FontSize: 
+							<select id="selectfontsize" onchange="getSelectValue_FontSize()" class ='diagrammenu'>
+							<?php
+								for ($size = 8; $size <= 36; $size++) echo "<option value=".$size.">".$size."pt</option>";
+							?>
+							</select>
+							</p>
+							<p class='diagrammenu-linetitle'>eCurveSize: 
+							<select id="selectErrorCurveSize" onchange="getSelectValue_ErrorCurveSize()" class ='diagrammenu'>
+								<option value="small">Small</option>
+								<option value="medium">Medium</option>
+								<option value="large">Large</option>
+							</select>
+							</p>
+							<p class='diagrammenu-linetitle'>LineWidth:
+							<select id="selectLineWidth" onchange="getSelectValue_LineWidth()" class ='diagrammenu'>
+								<option value="thin">Thin</option>
+								<option value="medium">Medium</option>
+								<option value="thick">Large</option>
+							</select>
+							</p>
+							<p class='diagrammenu-linetitle'> ChartSize: 
+							<select id="selectChartSize" onchange="getSelectValue_ChartSize()" class ='diagrammenu'>
+								<option value="small">Small</option>
+								<option value="medium">Medium</option>
+								<option value="large">Large</option>
+							</select>
+							</p>
+						</form>					
+					</div>			
+				</div>
+			</div> <!-- id="pdsvgdiagrammenus" -->
+			<hr>
+			<div id="pdsvgmatrix">
+				<div id="submatrix">
+									
+				</div>
+			</div><!-- end of div id="pdsvgmatrix"-->
+		</div> <!-- end of div id="menus"-->
+		<div id="svgcontainer">
+			<script src="./js/initiate.js" charset="utf-8"></script>
+			<script src="./js/btnfs.js" charset="utf-8"></script>
+		</div> <!-- end of div id="svgcontainer" -->
+	</div> <!-- <div id="pdsvgpage"-->
+	<div id="footer">
+		<div class="bar"></div>
+	</div>
+</div>
+</body>
