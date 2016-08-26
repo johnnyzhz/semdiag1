@@ -1,7 +1,3 @@
-Paper based on the path diagram interface
+A web-based application to draw path diagrams for structural equation models.
 
 Test website: http://semdiag.psychstat.org
-
-Deploy the code: http://semdiag.psychstat.org/deploy
-
-Only the files under the folder Code/ will be deployed to the website. The rest won't.
